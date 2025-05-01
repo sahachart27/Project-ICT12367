@@ -1,0 +1,48 @@
+{% extends 'job_application/base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1 class="my-4 text-center text-white bg-primary p-4 rounded shadow-lg">👨‍💼 ผู้ลงทะเบียนหลักสูตร</h1>
+
+    <!-- ปุ่มเพิ่มผู้สมัคร -->
+    <div class="text-end mb-4">
+        <a href="{% url 'add_application' %}" class="btn btn-success btn-lg rounded-pill px-4 shadow-sm">➕ เพิ่มผู้ลงทะเบียน</a>
+    </div>
+
+    <!-- ตารางข้อมูล -->
+    <div class="table-responsive rounded shadow-lg p-3 bg-white">
+        <table class="table table-striped table-hover align-middle">
+            <thead class="table-dark text-center">
+                <tr>
+                    <th>ชื่อ-นามสกุล</th>
+                    <th>หลักสูตรที่สมัคร</th>
+                    <th>สถานะการลงทะเบียน</th>
+                    <th>จัดการ</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for application in applications %}
+                <tr class="text-center">
+                    <td>{{ application.first_name }} {{ application.last_name }}</td>
+                    <td>{{ application.position_applied }}</td>
+                    <td>
+                        <span class="badge bg-info fs-6 p-2 shadow-sm">{{ application.get_application_status_display }}</span>
+                    </td>
+                    <td>
+                        <a href="{% url 'edit_application' application.pk %}" class="btn btn-warning btn-sm rounded-pill px-3 shadow-sm">✏️ แก้ไข</a>
+                        <a href="{% url 'delete_application' application.pk %}" class="btn btn-danger btn-sm rounded-pill px-3 shadow-sm"
+                           onclick="return confirm('คุณต้องการลบหลักสูตรที่สมัครนี้ใช่หรือไม่?')">🗑️ ลบ</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4">
+                        <div class="alert alert-warning text-center fs-4 p-3 shadow-sm">⛔ ไม่มีข้อมูลหลักสูตรที่สมัคร</div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends 'job_application/base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2 class="my-4 text-center">ผลการค้นหาผู้ลงทะเบียนหลักสูตร</h2>
+
+    <!-- ส่วนค้นหา -->
+    <div class="card card-body shadow-sm mb-4">
+        <form method="GET" action="{% url 'search_application' %}" class="border rounded p-3">
+            <div class="input-group">
+                <input type="text" name="q" value="{{ query }}" class="form-control" placeholder="ค้นหาชื่อหรือตำแหน่งที่สมัคร">
+                <button type="submit" class="btn btn-outline-primary">ค้นหาผู้ลงทะเบียนหลักสูตร</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- ตารางผลการค้นหา -->
+    <table class="table table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th scope="col">ชื่อ</th>
+                <th scope="col">ตำแหน่งที่สมัคร</th>
+                <th scope="col">สถานะการสมัครงาน</th>
+                <th scope="col">จัดการ</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for application in applications %}
+            <tr>
+                <td>{{ application.first_name }} {{ application.last_name }}</td>
+                <td>{{ application.position_applied }}</td>
+                <td>{{ application.get_application_status_display }}</td>
+                <td>
+                    <a href="{% url 'edit_application' application.pk %}" class="btn btn-warning btn-sm">แก้ไข</a>
+                    <a href="{% url 'delete_application' application.pk %}" class="btn btn-danger btn-sm"
+                       onclick="return confirm('คุณต้องการลบผู้สมัครงานนี้ใช่หรือไม่?')">ลบ</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4">
+                    <div class="alert alert-warning text-center">ไม่มีข้อมูลผู้สมัครงาน</div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
